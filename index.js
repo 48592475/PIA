@@ -9,7 +9,7 @@ const web = express();
 web.use(express.json());
 web.use(cors());
 
-web.use('/', usuarioRoutes);
+web.use('/auth', usuarioRoutes);
 
 web.get("/", (_, res) => res.send("PIA API esta corriendo..."));
 

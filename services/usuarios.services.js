@@ -8,7 +8,7 @@ const createUsuario = async (medico) => {
 
     try {
         const { rows } = await client.query(
-            "INSERT INTO Medico (dni, nombre, apellido, descripcion, email, experiencia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            "INSERT INTO medico (dni, nombre, apellido, descripcion, email, experiencia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
             [medico.dni, medico.nombre, medico.apellido, medico.descripcion, medico.email, medico.experiencia]
         );
         return rows[0];
