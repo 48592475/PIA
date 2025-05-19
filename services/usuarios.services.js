@@ -7,9 +7,10 @@ const getPassword = async (medico) => {
     await client.connect();
     try{
         const {rows} = await client.query(
-            "SELECT password FROM medico",
+            "SELECT * FROM medico WHERE password = $1",
+            [medico.password]
         );
-        return rows.map(r => r.password);
+        return rows.length > 0 ? rows  [0] : null;
     }catch(error){
         throw error;
     }finally{
