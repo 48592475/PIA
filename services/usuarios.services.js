@@ -2,7 +2,7 @@ import { config } from "../db.js";
 import pkg from "pg";
 const { Client } = pkg;
 
-const getDocument = async (dni) => {
+const getUser = async (dni) => {
   const client = new Client(config);
   await client.connect();
   try {
@@ -34,4 +34,4 @@ const createUsuario = async (medico) => {
 };
 
 
-export default { createUsuario, getDocument };
+export default { createUsuario, getUser };

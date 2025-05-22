@@ -27,10 +27,10 @@ const SignUp = async (req, res) => {
 };
 
 const SignIn = async (req, res) => {
-    const user = req.body;
+    const login = req.body;
     const camposObligatorios = ["dni", "password"];
 
-    const camposFaltantes = camposObligatorios.filter(campo => !user[campo]);
+    const camposFaltantes = camposObligatorios.filter(campo => !login[campo]);
 
     if (camposFaltantes.length > 0){
         return res.status(400).json({
@@ -38,11 +38,11 @@ const SignIn = async (req, res) => {
         });
     }
     try{
-        const document = await usuariosServices.getDocument(dni);
-        if (!document){
+        const user = await usuariosServices.getUser(login.dni);
+        if (!user && !passwordCorrect){
             return res.status(400).json({message : "No hay ningun registro con ese DNI, porfavor verifique sus datos."})
         }
-        const passwordCorrect = await bcrypt.compare(password, user.password);
+        const passwordCorrect = await bcrypt.compare(login.password, user.password);
         if(!passwordCorrect){
             return res.status(400).json({message : "Contraseña incorrecta, porfavor verifique sus datos"})
         }
