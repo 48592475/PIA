@@ -12,7 +12,7 @@ const SignUp = async (req, res) => {
         });
     }
     try {
-        const document = await usuariosServices.getDocument(user.dni);
+        const document = await usuariosServices.getUser(user.dni);
         if (document){
             return res.status(400).json({message : "Ese DNI ya fue ingresado, porfavor ingrese otro o verifique sus datos."})
         }
