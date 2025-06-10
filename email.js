@@ -21,3 +21,21 @@ export const sendResetPasswordEmail = async (to, token) => {
 
   await email.sendMail(mailOptions);
 };
+export const Welcome = async (to) => {
+  const welcome = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "pancreasartificialintelligence@gmail.com", 
+      pass: "kyqd viqs xbfd mmmi", 
+    },
+  });
+
+  const welcomeEmail = {
+    from: "PIA <tuemail@gmail.com>",
+    to,
+    subject: "Registro Exitoso en PIA",
+    html: `<p>Bienvenido, Muchisimas Gracias por confiar en nosotros, ahora a disfrutar de PIA. Cualquier duda podes contactarnos en: pancreasartificialintelligence@gmail.com</p>`,
+  };
+
+  await welcome.sendMail(welcomeEmail);
+};

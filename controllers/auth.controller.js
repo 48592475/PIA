@@ -2,6 +2,7 @@ import usuariosServices from "../services/usuarios.services.js";
 import bcrypt from "bcryptjs";
 import { generateResetToken } from "../token.js";
 import { sendResetPasswordEmail } from "../email.js";
+import { Welcome } from "../email.js";
 
 const SignUp = async (req, res) => {
     const user = req.body; //Lo que hace aca es guardar toda la informacion que mando el usuario, en este usuario su nombre, apellido, dni, email y password
@@ -20,7 +21,9 @@ const SignUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
         await usuariosServices.createUsuario(user);
+        await Welcome(user.email);
         return res.status(201).json({ message: "Felicitaciones, te has registrado de forma exitosa en PIA." });
+        
     } catch (error) {
         console.error("Error al registrar el usuario:", error);
         return res.status(500).json({ message: error.message });
