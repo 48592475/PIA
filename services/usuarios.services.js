@@ -16,6 +16,20 @@ const getUser = async (dni) => {
   }
 };
 
+const getUserByDniAndEmail = async (dni, email) => {
+  const client = new Client(config);
+  await client.connect();
+  try {
+    const { rows } = await client.query(
+      "SELECT * FROM medico WHERE dni = $1 AND email = $2",
+      [dni, email]
+    );
+    return rows[0];
+  } finally {
+    await client.end();
+  }
+};
+
 const createUsuario = async (medico) => {
     const client = new Client(config);
     await client.connect();
@@ -32,6 +46,22 @@ const createUsuario = async (medico) => {
         await client.end();
     }
 };
+const updatePassword = async (usuario, contraseña) => {
+    const client = new Client(config);
+    await client.connect();
+    try {
+        const queryUpdate = `
+            UPDATE medico 
+            SET password = $2
+            WHERE medico = $1
+        `;
+        await client.query(queryUpdate, [password]);
+        return true; 
+    } catch (error) {
+        throw error;
+    } finally {
+        await client.end();
+    }
+};
 
-
-export default { createUsuario, getUser };
+export default { createUsuario, getUser, getUserByDniAndEmail, updatePassword };
