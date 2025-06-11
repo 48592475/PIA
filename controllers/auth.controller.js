@@ -12,17 +12,17 @@ const SignUp = async (req, res) => {
 
     if (camposFaltantes.length > 0){
         return res.status(400).json({message: `Faltan completar los siguientes campos obligatorios: ${camposFaltantes.join(', ')}`});
-    } //Aca lo que hace es chequear 
+    } //Aca lo que hace es chequear si campos faltantes  es mayor a 0 y si es asi le envia una respuesta de tipo 400 en la que le dice que falta ccompletar un campo, y cual es el restante
     try {
-        const document = await usuariosServices.getUser(user.dni);
+        const document = await usuariosServices.getUser(user.dni);//Aca lo que hace es nombrar a la variable document, en la que le dice que debe llamar a la funcion get user la cual se va a encaargar de chequear que ese usuario exista en la base de datos (DNI)
         if (document){
             return res.status(400).json({message : "Ese DNI ya fue ingresado, porfavor ingrese otro o verifique sus datos."})
-        }
+        }//Aca chequeaa si ya hay un usuario con ese DNI y si es asi, le tira una rta de tipo 400 diciendole que ya existe una cuenta registrada con ese documento
         const hashedPassword = await bcrypt.hash(user.password, 10);
-        user.password = hashedPassword;
-        await usuariosServices.createUsuario(user);
-        await Welcome(user.email);
-        return res.status(201).json({ message: "Felicitaciones, te has registrado de forma exitosa en PIA." });
+        user.password = hashedPassword; //Aca lo que hace es agarrar la contraseña que ingreso el usuario, y la hashea, 10 veces para que sea mas segura e imposible de descubrirla en caso de un robo de la base de datos
+        await usuariosServices.createUsuario(user);//Si todo es correcto llama a la funcion ccccreada en el service de create usuario, y lo crea en la base de datos
+        await Welcome(user.email);//Aca llama a la funcion welcome de el archivo email.js el cual se va a encargar de enviarle al mail ingresado por el usuario de que su registro fue exitoso
+        return res.status(201).json({ message: "Felicitaciones, te has registrado de forma exitosa en PIA." });//Aca le brinda una respuesta de tipo 201, en la que le da el mensaje de que el registro fue exitoso, sumado al mail que le va a llegar al usuario.
         
     } catch (error) {
         console.error("Error al registrar el usuario:", error);
