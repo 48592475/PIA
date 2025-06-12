@@ -53,7 +53,7 @@ const updatePassword = async (usuario, contraseña) => {
         const queryUpdate = `
             UPDATE medico 
             SET password = $2
-            WHERE medico = $1
+            WHERE password = $1
         `;
         await client.query(queryUpdate, [password]);
         return true; 
