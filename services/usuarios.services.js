@@ -46,22 +46,23 @@ const createUsuario = async (medico) => {
         await client.end();
     }
 };
-const updatePassword = async (usuario, contraseña) => {
+const updatePassword = async (dni, password) => {
     const client = new Client(config);
     await client.connect();
     try {
-        const queryUpdate = `
-            UPDATE medico 
-            SET password = $2
-            WHERE password = $1
-        `;
-        await client.query(queryUpdate, [password]);
-        return true; 
+      const queryUpdate = `
+        UPDATE medico
+        SET password = $2
+        WHERE dni = $1
+      `;
+      await client.query(queryUpdate, [dni, password]);
+      return true;
     } catch (error) {
-        throw error;
+      throw error;
     } finally {
-        await client.end();
+      await client.end();
     }
-};
+  };
+  
 
 export default { createUsuario, getUser, getUserByDniAndEmail, updatePassword };

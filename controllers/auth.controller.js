@@ -80,23 +80,31 @@ const Forgot_Password = async (req, res) => {
   }
 };
 const Update_Password = async (req, res) => {
-  const update_password = req.body;
-  const camposObligatorios = ["password"];
+  const { dni, password } = req.body;
+  const camposObligatorios = ["dni", "password"];
 
-  const camposFaltantes = camposObligatorios.filter(campo => !update_password[campo]);
-  if (camposFaltantes.length > 0){
-        return res.status(400).json({message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}`});
-    }
+  const camposFaltantes = camposObligatorios.filter(campo => !req.body[campo]);
+  if (camposFaltantes.length > 0) {
+    return res.status(400).json({ message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}` });
+  }
 
   try {
-    const hashedContra = await bcrypt.hash(contraseña, 10);
-    await usuariosService.actualizarContraseña(usuario, hashedContra);
+    // Verificar si el usuario existe
+    const user = await usuariosServices.getUser(dni);
+    if (!user) {
+      return res.status(400).json({ message: "There is no user with that ID." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await usuariosServices.updatePassword(dni, hashedPassword);
     return res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    console.error("Error sending mail:", error);
+    console.error("Error updating password:", error);
     return res.status(500).json({ message: "Internal Server Error." });
   }
 };
+
+
 
 
 export default { SignUp, SignIn, Forgot_Password, Update_Password};
