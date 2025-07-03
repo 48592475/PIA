@@ -13,6 +13,6 @@ web.use('/auth', usuarioRoutes);
 
 web.get("/", (_, res) => res.send("PIA API esta corriendo..."));
 
-web.listen(process.env.PORT || 3000 , () => 
-    console.log(`Servidor corriendo en puerto ${process.env.PORT || 3000}`)
+web.listen(process.env.PORT || 3001 , () => 
+    console.log(`Servidor corriendo en puerto ${process.env.PORT || 3001}`)
 )

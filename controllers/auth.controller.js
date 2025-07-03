@@ -59,7 +59,7 @@ const Forgot_Password = async (req, res) => {
   const { dni, email } = req.body;
 
   if (!dni || !email) {
-    return res.status(400).json({ message: "ID and Email are mandatory." });
+    return res.status(400).json({ message: "ID and Email are mandatory.", fullName: `${user.nombre} ${user.apellido}` });
   }
 
   try {
