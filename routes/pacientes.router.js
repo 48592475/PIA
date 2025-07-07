@@ -1,6 +1,5 @@
 const router = express.Router();
 import express from "express";
-import bcrypt from "bcryptjs";
 import pacientesController from "../controllers/pacientes.controller.js";
 
 
