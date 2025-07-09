@@ -11,8 +11,7 @@ const createPaciente = async (req, res) => {
         return res.status(400).json({message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}`});
     }
     try {
-        const document = await usuariosServices.getPaciente(pacientes.dni);
-        await paccientesServices.createPaciente(pacientes);
+        await pacientesServices.createPaciente(pacientes);
         return res.status(201).json({ message: "Congratulations, you have successfully create a Patient." });
     } catch (error) {
         console.error("Error registering user:", error);
