@@ -9,7 +9,7 @@ export const sendResetPasswordEmail = async (to, token) => {
     },
   });
 
-  const resetLink = `https://tuapp.com/reset-password/${token}`;
+  const resetLink = `http://localhost:3000/updatepassword/`;
 
   const mailOptions = {
     from: "PIA<tuemail@gmail.com>",
