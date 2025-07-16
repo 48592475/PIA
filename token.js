@@ -1,11 +1,16 @@
-import jwt from "jsonwebtoken";
+// token.js
+import jwt from 'jsonwebtoken';
 
-const SECRET = "clave";
+const SECRET = 'piaesunainteligenciaartificialsuperbuena';
 
-export const generateResetToken = (dni, email) => {
-  return jwt.sign({ dni, email }, SECRET, { expiresIn: "15m" });
-};
+export function generateResetToken(email) {
+  return jwt.sign({ email }, SECRET, { expiresIn: '15m' }); // expira en 15 minutos
+}
 
-export const verifyResetToken = (token) => {
-  return jwt.verify(token, SECRET);
-};
+export function verifyResetToken(token) {
+  try {
+    return jwt.verify(token, SECRET);
+  } catch (error) {
+    return null;
+  }
+}
