@@ -64,7 +64,7 @@ const SignIn = async (req, res) => {
       });
     }
 
-    return res.status(200).json({ message: "Login successful, welcome to PIA." });
+    return res.status(200).json({ message: "Login successful, welcome to PIA." }, {fullName: `${user.nombre} ${user.apellido}`});
 
   } catch (error) {
     console.error("Login error:", error);
