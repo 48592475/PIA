@@ -44,5 +44,40 @@ const upload_information = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+const save_resultado_ia = async (req, res) => {
+    const { resultado_ia } = req.body;
 
-export default { createPaciente, upload_information};
+    if (!resultado_ia) {
+        return res.status(400).json({ message: "'resultado_ia' is required." });
+    }
+
+    try {
+        await pacientesServices.guardarResultadoIA(resultado_ia);
+        return res.status(201).json({ message: "AI result saved without DNI." });
+    } catch (error) {
+        console.error("Error saving AI result:", error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+const uploadRadiografia = async (req, res) => {
+    const { dni } = req.body;
+    const imagen = req.file;
+
+    if (!dni || !imagen) {
+        return res.status(400).json({ message: "DNI and image file are required." });
+    }
+
+    try {
+        const paciente = await pacientesServices.getPaciente(dni);
+        if (!paciente) {
+            return res.status(404).json({ message: "No patient found with the provided DNI." });
+        }
+
+        await pacientesServices.guardarRadiografia(dni, imagen.buffer);
+        return res.status(201).json({ message: "Radiography uploaded successfully." });
+    } catch (error) {
+        console.error("Error uploading radiography:", error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+export default { createPaciente, upload_information, save_resultado_ia, uploadRadiografia};

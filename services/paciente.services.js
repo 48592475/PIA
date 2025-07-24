@@ -62,6 +62,37 @@ const upload_analisis_sangre = async (paciente) => {
         await client.end();
     }
 };
+const guardarResultadoIA = async (resultado_ia) => {
+    const client = new Client(config);
+    await client.connect();
 
+    try {
+        const { rows } = await client.query(
+            `INSERT INTO resultados_ia (resultado) VALUES ($1) RETURNING *`,
+            [resultado_ia]
+        );
+        return rows[0];
+    } catch (error) {
+        throw error;
+    } finally {
+        await client.end();
+    }
+};
+const guardarRadiografia = async (dni, radiografia) => {
+    const client = new Client(config);
+    await client.connect();
 
-export default { createPaciente, getPaciente, upload_analisis_sangre};
+    try {
+        const { rows } = await client.query(
+            `INSERT INTO radiografias (radiografia, dni) VALUES ($1, $2) RETURNING *`,
+            [radiografia, dni]
+        );
+        return rows[0];
+    } catch (error) {
+        throw error;
+    } finally {
+        await client.end();
+    }
+};
+
+export default { createPaciente, getPaciente, upload_analisis_sangre, guardarResultadoIA, guardarRadiografia};
