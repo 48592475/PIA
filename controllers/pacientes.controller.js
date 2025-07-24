@@ -7,20 +7,36 @@ const createPaciente = async (req, res) => {
     const camposFaltantes = camposObligatorios.filter(campo => !pacientes[campo]);
 
     if (camposFaltantes.length > 0){
-        return res.status(400).json({message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}`});
+        return res.status(400).json({
+            message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}`
+        });
     }
+
+    const sexValue = pacientes.sexo === 'Men' ? 'M' : pacientes.sexo === 'Women' ? 'F' : null;
+    if (sexValue === null) {
+        return res.status(400).json({ message: "Invalid sex value. Must be 'Men' or 'Women'" });
+    }
+
+    pacientes.sexo = sexValue; 
+
     try {
         const document = await pacientesServices.getPaciente(pacientes.dni);
-                if (document){
-                    return res.status(400).json({message : "That ID has already been entered, please enter another one or verify your information."})
-                }
+        if (document){
+            return res.status(400).json({
+                message: "That ID has already been entered, please enter another one or verify your information."
+            });
+        }
+
         await pacientesServices.createPaciente(pacientes);
-        return res.status(201).json({ message: "Congratulations, you have successfully create a Patient." });
+        return res.status(201).json({
+            message: "Congratulations, you have successfully created a Patient."
+        });
     } catch (error) {
         console.error("Error registering user:", error);
         return res.status(500).json({ message: error.message });
     }
 };
+
 const upload_information = async (req, res) => {
     const pacientes = req.body;
     const camposObligatorios = ["dni", "diagnosis", "plasma_ca19_9", "creatinine", "lye1", "reg1b", "tff1", "reg1a", "sex_f", "sex_m", "cea", "thbs"];
