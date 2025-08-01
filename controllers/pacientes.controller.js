@@ -17,7 +17,7 @@ const createPaciente = async (req, res) => {
         return res.status(400).json({ message: "Invalid sex value. Must be 'Men' or 'Women'" });
     }
 
-    pacientes.sexo = sexValue; 
+    pacientes.sexo = sexValue;
 
     try {
         const document = await pacientesServices.getPaciente(pacientes.dni);
@@ -26,6 +26,9 @@ const createPaciente = async (req, res) => {
                 message: "That ID has already been entered, please enter another one or verify your information."
             });
         }
+
+        // 👇🏻 Agregamos el ID del usuario logueado
+        pacientes.user_id = req.userId;
 
         await pacientesServices.createPaciente(pacientes);
         return res.status(201).json({
@@ -96,4 +99,21 @@ const uploadRadiografia = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-export default { createPaciente, upload_information, save_resultado_ia, uploadRadiografia};
+
+const getPacientesByUser = async (req, res) => {
+  try {
+    const userId = req.userId; // Este valor lo pone `verifyToken`
+    console.log('User ID recibido:', userId);
+
+    const pacientes = await pacientesServices.getPacientesByUserId(userId);
+    console.log('Pacientes encontrados:', pacientes);
+
+    return res.status(200).json(pacientes);
+  } catch (error) {
+    console.error('Error en getPacientesByUser:', error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
+export default { createPaciente, upload_information, save_resultado_ia, uploadRadiografia, getPacientesByUser};

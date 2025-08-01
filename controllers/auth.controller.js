@@ -2,6 +2,7 @@ import usuariosServices from "../services/usuarios.services.js";
 import bcrypt from "bcryptjs";
 import { sendResetPasswordEmail, Welcome } from "../email.js";
 import crypto from "crypto";
+import jwt from 'jsonwebtoken'
 
 const SignUp = async (req, res) => {
   const user = req.body;
@@ -64,13 +65,20 @@ const SignIn = async (req, res) => {
       });
     }
 
-    return res.status(200).json({ message: "Login successful, welcome to PIA." }, {fullName: `${user.nombre} ${user.apellido}`});
+    const token = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: "5h" });
+    console.log(token)
+    return res.status(200).json({ 
+      message: "Login successful, welcome to PIA.",
+      token: token,
+      fullName: `${user.nombre} ${user.apellido}`
+    });
 
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 const Forgot_Password = async (req, res) => {
   const { email } = req.body;

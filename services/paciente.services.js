@@ -8,8 +8,8 @@ const createPaciente = async (paciente) => {
 
     try {
         const { rows } = await client.query(
-            "INSERT INTO pacientes (nombre, apellido, age, sexo, lugar_nacimiento, dni) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-            [paciente.nombre, paciente.apellido, paciente.age, paciente.sexo, paciente.lugar_nacimiento, paciente.dni]
+            "INSERT INTO pacientes (nombre, apellido, age, sexo, lugar_nacimiento, dni, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [paciente.nombre, paciente.apellido, paciente.age, paciente.sexo, paciente.lugar_nacimiento, paciente.dni, paciente.user_id]
         );
         return rows[0];
     } catch (error) {
@@ -95,4 +95,23 @@ const guardarRadiografia = async (dni, radiografia) => {
     }
 };
 
-export default { createPaciente, getPaciente, upload_analisis_sangre, guardarResultadoIA, guardarRadiografia};
+const getPacientesByUserId = async (userId) => {
+  const client = new Client(config);
+  await client.connect();
+
+  try {
+    const query = `
+      SELECT nombre, apellido, age, lugar_nacimiento, sexo, dni
+      FROM pacientes
+      WHERE user_id = $1
+    `;
+    const { rows } = await client.query(query, [userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  } finally {
+    await client.end();
+  }
+};
+
+export default { createPaciente, getPaciente, upload_analisis_sangre, guardarResultadoIA, guardarRadiografia, getPacientesByUserId};

@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
 import dotenv from 'dotenv';
 import usuarioRoutes from './routes/auth.router.js';
 import pacientesRoutes from './routes/pacientes.router.js';
+
 dotenv.config();
 const web = express();
 
