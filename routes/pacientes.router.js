@@ -16,6 +16,8 @@ import express from "express";
 import axios from "axios";
 import pkg from "pg";
 import { config } from "../db.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+import pacientesController from "../controllers/pacientes.controller.js";
 
 const { Pool } = pkg;
 const pool = new Pool({
@@ -71,6 +73,9 @@ router.post("/predict", async (req, res) => {
     res.status(500).json({ error: "Error al obtener la predicción o guardar el paciente", details: error.message });
     }
 });
+
+router.post("/create_paciente", verifyToken, pacientesController.createPaciente);
+router.get("/get_pacients_by_id", verifyToken, pacientesController.getPacientesByUser)
 
 export default router;
 
