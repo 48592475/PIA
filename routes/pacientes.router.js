@@ -1,5 +1,9 @@
 const router = express.Router();
 import express from "express";
+import axios from "axios";
+import pkg from "pg";
+import { config } from "../db.js"
+
 import pacientesController from "../controllers/pacientes.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
@@ -10,14 +14,11 @@ router.post("/upload_sangre", pacientesController.upload_information);
 router.post("/save_resultado_ia", pacientesController.save_resultado_ia);
 
 
-
 const { Pool } = pkg;
 const pool = new Pool({
     ...config,
     ssl: { rejectUnauthorized: false } 
 });
-
-
 
 router.post("/predict", async (req, res) => {
     try {
