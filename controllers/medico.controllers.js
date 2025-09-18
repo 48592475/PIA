@@ -2,12 +2,8 @@ import medicosServices from "../services/medicos.services.js";
 
 export const updateMedico = async (req, res) => {
   try {
-    const { dni } = req.params;
-    const { hospital, descripcion, experiencia } = req.body;
+    const {dni,  hospital, descripcion, experiencia } = req.body;
 
-    if (!dni) {
-      return res.status(400).json({ message: "El DNI es obligatorio." });
-    }
 
     const camposObligatorios = ["hospital", "descripcion", "experiencia"];
     const faltantes = camposObligatorios.filter(c => !req.body[c]);
