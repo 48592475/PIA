@@ -101,14 +101,17 @@ const getPacientesByUserId = async (userId) => {
 
   try {
     const query = `
-      SELECT nombre, apellido, age, lugar_nacimiento, sexo, dni
+      SELECT 
+        nombre, 
+        apellido, 
+        age, 
+        lugar_nacimiento, 
+        dni
       FROM pacientes
       WHERE user_id = $1
     `;
     const { rows } = await client.query(query, [userId]);
     return rows;
-  } catch (error) {
-    throw error;
   } finally {
     await client.end();
   }

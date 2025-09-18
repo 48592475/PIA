@@ -2,7 +2,7 @@ import pacientesServices from "../services/paciente.services.js";
 
 const createPaciente = async (req, res) => {
     const pacientes = req.body;
-    const camposObligatorios = ["nombre", "apellido", "age", "sexo", "lugar_nacimiento", "dni"];
+    const camposObligatorios = ["nombre", "apellido", "age", "lugar_nacimiento", "dni"];
 
     const camposFaltantes = camposObligatorios.filter(campo => !pacientes[campo]);
 
@@ -11,13 +11,6 @@ const createPaciente = async (req, res) => {
             message: `The following mandatory fields remain to be completed: ${camposFaltantes.join(', ')}`
         });
     }
-
-    const sexValue = pacientes.sexo === 'Men' ? 'M' : pacientes.sexo === 'Women' ? 'F' : null;
-    if (sexValue === null) {
-        return res.status(400).json({ message: "Invalid sex value. Must be 'Men' or 'Women'" });
-    }
-
-    pacientes.sexo = sexValue;
 
     try {
         const document = await pacientesServices.getPaciente(pacientes.dni);
