@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import usuarioRoutes from './routes/auth.router.js';
 import pacientesRoutes from './routes/pacientes.router.js';
+import medicosRoutes from './routes/medicos.router.js';
 
 dotenv.config();
 const web = express();
@@ -12,6 +13,7 @@ web.use(cors());
 
 web.use('/auth', usuarioRoutes);
 web.use('/paciente', pacientesRoutes);
+web.use('/medico', medicosRoutes);
 
 web.get("/", (_, res) => res.send("PIA API esta corriendo..."));
 

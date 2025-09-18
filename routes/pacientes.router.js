@@ -1,31 +1,23 @@
-/*import express from "express";
+const router = express.Router();
+import express from "express";
 import pacientesController from "../controllers/pacientes.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
-const router = express.Router();
 
 router.post("/create_paciente", verifyToken, pacientesController.createPaciente);
 router.get("/get_pacients_by_id", verifyToken, pacientesController.getPacientesByUser)
 router.post("/upload_sangre", pacientesController.upload_information);
 router.post("/save_resultado_ia", pacientesController.save_resultado_ia);
-// router.post("/radiografia", uploadsingle("radiografia"), pacientesController.uploadRadiografia);
 
-export default router;  */
 
-import express from "express";
-import axios from "axios";
-import pkg from "pg";
-import { config } from "../db.js";
-import { verifyToken } from "../middleware/verifyToken.js";
-import pacientesController from "../controllers/pacientes.controller.js";
 
 const { Pool } = pkg;
 const pool = new Pool({
     ...config,
-    ssl: { rejectUnauthorized: false } // esto no toca tu config original
+    ssl: { rejectUnauthorized: false } 
 });
 
-const router = express.Router();
+
 
 router.post("/predict", async (req, res) => {
     try {
@@ -76,6 +68,6 @@ router.post("/predict", async (req, res) => {
 
 router.post("/create_paciente", verifyToken, pacientesController.createPaciente);
 router.get("/get_pacients_by_id", verifyToken, pacientesController.getPacientesByUser)
-
 export default router;
+
 
