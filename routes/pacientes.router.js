@@ -3,6 +3,7 @@ import express from "express";
 import axios from "axios";
 import pkg from "pg";
 import { config } from "../db.js"
+const URL_PREDICTOR = process.env.URL_PREDICTOR
 
 import pacientesController from "../controllers/pacientes.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -25,7 +26,7 @@ router.post("/predict", async (req, res) => {
         const body = req.body;
 
         // Llamamos a la IA
-        const response = await axios.post("http://127.0.0.1:8001/predict", body, {
+        const response = await axios.post(URL_PREDICTOR, body, {
             headers: { "Content-Type": "application/json" }
         });
 
