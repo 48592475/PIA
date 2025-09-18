@@ -9,7 +9,7 @@ export const getMedicoByDni = async (dni) => {
   try {
     const query = `
       SELECT dni, hospital, descripcion, experiencia
-      FROM medicos
+      FROM medico
       WHERE dni = $1
     `;
     const { rows } = await client.query(query, [dni]);
@@ -28,7 +28,7 @@ export const updateMedicoByDni = async (dni, { hospital, descripcion, experienci
 
   try {
     const query = `
-      UPDATE medicos
+      UPDATE medico
       SET hospital = $1,
           descripcion = $2,
           experiencia = $3
