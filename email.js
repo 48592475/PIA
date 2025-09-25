@@ -9,7 +9,7 @@ export const sendResetPasswordEmail = async (to, token) => {
     },
   });
 
-  const resetLink = `http://localhost:3000/updatepassword/?token=${token}`
+  const resetLink = `https://pia-front.vercel.app/updatepassword/?token=${token}`
 
   const mailOptions = {
     from: "PIA<tuemail@gmail.com>",
