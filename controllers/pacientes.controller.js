@@ -71,27 +71,32 @@ const save_resultado_ia = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-const uploadRadiografia = async (req, res) => {
-    const { dni } = req.body;
-    const imagen = req.file;
+export const uploadRadiografia = async (req, res) => {
+  try {
+    const { dni } = req.body
+    const file = req.file
 
-    if (!dni || !imagen) {
-        return res.status(400).json({ message: "DNI and image file are required." });
+    if (!file) {
+      return res.status(400).json({ message: "No se envió ninguna imagen" })
     }
 
-    try {
-        const paciente = await pacientesServices.getPaciente(dni);
-        if (!paciente) {
-            return res.status(404).json({ message: "No patient found with the provided DNI." });
-        }
-
-        await pacientesServices.guardarRadiografia(dni, imagen.buffer);
-        return res.status(201).json({ message: "Radiography uploaded successfully." });
-    } catch (error) {
-        console.error("Error uploading radiography:", error);
-        return res.status(500).json({ message: error.message });
+    if (!dni) {
+      return res.status(400).json({ message: "No se envió el DNI del paciente" })
     }
-};
+
+    const radiografiaBuffer = file.buffer
+
+    const nuevaRadiografia = await pacientesServices.guardarRadiografia(dni, radiografiaBuffer)
+
+    res.status(200).json({
+      message: "Radiografía subida correctamente",
+      radiografia: nuevaRadiografia,
+    })
+  } catch (error) {
+    console.error("Error al subir radiografía:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
 
 const getPacientesByUser = async (req, res) => {
   try {
