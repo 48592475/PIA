@@ -121,5 +121,7 @@ router.post(
   upload.single("imagen"),
   pacientesController.uploadRadiografia
 )
+router.get("/radiografias", pacientesController.getAllRadiografias);
+
 
 export default router

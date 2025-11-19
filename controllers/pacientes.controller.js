@@ -113,5 +113,22 @@ const getPacientesByUser = async (req, res) => {
   }
 };
 
+export const getAllRadiografias = async (req, res) => {
+  try {
+    const radiografias = await pacientesServices.getAllRadiografias();
 
-export default { createPaciente, upload_information, save_resultado_ia, uploadRadiografia, getPacientesByUser};
+    // Convertimos cada imagen a base64
+    const radiografiasBase64 = radiografias.map(r => ({
+      dni: r.dni,
+      imagen: `data:image/jpeg;base64,${r.radiografia.toString("base64")}`,
+    }));
+
+    return res.status(200).json(radiografiasBase64);
+  } catch (error) {
+    console.error("Error al obtener radiografías:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+
+export default { createPaciente, upload_information, save_resultado_ia, uploadRadiografia, getPacientesByUser, getAllRadiografias};

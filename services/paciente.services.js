@@ -177,6 +177,22 @@ const getPacientesByUserId = async (userId) => {
   }
 }
 
+const getAllRadiografias = async () => {
+  const client = new Client(config);
+  await client.connect();
+
+  try {
+    const { rows } = await client.query(
+      "SELECT dni, radiografia FROM radiografias ORDER BY id DESC"
+    );
+
+    return rows;
+  } finally {
+    await client.end();
+  }
+};
+
+
 export default {
   createPaciente,
   createPacienteWithPrediction, // Added new service
@@ -185,4 +201,5 @@ export default {
   guardarResultadoIA,
   guardarRadiografia,
   getPacientesByUserId,
+  getAllRadiografias
 }
