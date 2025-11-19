@@ -21,7 +21,7 @@ def analyze_blood(data: dict, db: Session = Depends(get_db)):
     """
 
     # Llamada al modelo IA (suponiendo que corre en http://localhost:8001/predict)
-    response = requests.post("http://localhost:8001/predict", json=data)
+    response = requests.post("http://127.0.0.1:8001/predict", json=data)
     prediction = response.json().get("prediction")
 
     # Guardar en la DB
