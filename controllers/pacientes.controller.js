@@ -109,7 +109,7 @@ export const uploadRadiografia = async (req, res) => {
 
   } catch (error) {
     console.error("Error al subir radiografía:", error);
-    res.status(500).json({ message: "Error interno del servidor", error });
+    res.status(500).json({ message: "Error interno d213el servidor", error });
   }
 };
 
