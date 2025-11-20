@@ -140,17 +140,14 @@ const guardarRadiografia = async (dni, radiografia, resultadoIA) => {
 
   try {
     const { rows } = await client.query(
-      `
-        INSERT INTO radiografias (radiografia, dni, resultado_ia)
-        VALUES ($1, $2, $3)
-        RETURNING *;
-      `,
+      `INSERT INTO radiografias (radiografia, dni, resultado_ia)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
       [radiografia, dni, resultadoIA]
     );
 
     return rows[0];
-  } catch (error) {
-    throw error;
+
   } finally {
     await client.end();
   }
