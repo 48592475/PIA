@@ -134,16 +134,16 @@ const guardarResultadoIA = async (resultado_ia) => {
   }
 }
 
-const guardarRadiografia = async (dni, radiografia, resultadoIA) => {
+const guardarRadiografia = async (dni, radiografia, resultadoIA, userId) => {
   const client = new Client(config);
   await client.connect();
 
   try {
     const { rows } = await client.query(
-      `INSERT INTO radiografias (radiografia, dni, resultado_ia)
-       VALUES ($1, $2, $3)
+      `INSERT INTO radiografias (radiografia, dni, resultado_ia, user_id)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [radiografia, dni, resultadoIA]
+      [radiografia, dni, resultadoIA, userId]
     );
 
     return rows[0];
@@ -152,6 +152,7 @@ const guardarRadiografia = async (dni, radiografia, resultadoIA) => {
     await client.end();
   }
 };
+
 
 const getPacientesByUserId = async (userId) => {
   const client = new Client(config)
@@ -179,13 +180,17 @@ const getPacientesByUserId = async (userId) => {
   }
 }
 
-const getAllRadiografias = async () => {
+const getAllRadiografias = async (userId) => {
   const client = new Client(config);
   await client.connect();
 
   try {
     const { rows } = await client.query(
-      "SELECT dni, radiografia, resultado_ia FROM radiografias ORDER BY id DESC"
+      `SELECT dni, radiografia, resultado_ia
+       FROM radiografias
+       WHERE user_id = $1
+       ORDER BY id DESC`,
+      [userId]
     );
 
     return rows;

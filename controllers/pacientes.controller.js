@@ -78,6 +78,7 @@ export const uploadRadiografia = async (req, res) => {
   try {
     const { dni } = req.body;
     const file = req.file;
+    const userId = req.userId;
 
     if (!file) {
       return res.status(400).json({ message: "No se envió ninguna imagen" });
@@ -114,7 +115,8 @@ export const uploadRadiografia = async (req, res) => {
     const nueva = await pacientesServices.guardarRadiografia(
       dni,
       file.buffer,
-      iaResult
+      iaResult,
+      userId
     );
 
     // ===== 4. Responder =====
@@ -150,7 +152,8 @@ const getPacientesByUser = async (req, res) => {
 
 export const getAllRadiografias = async (req, res) => {
   try {
-    const radiografias = await pacientesServices.getAllRadiografias();
+    const userId = req.userId;
+    const radiografias = await pacientesServices.getAllRadiografias(userId);
 
     // Convertimos cada imagen a base64
     const radiografiasBase64 = radiografias.map(r => ({
