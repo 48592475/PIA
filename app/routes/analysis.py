@@ -20,11 +20,18 @@ def analyze_blood(data: dict, db: Session = Depends(get_db)):
     llama al modelo IA y guarda el resultado en la DB.
     """
 
-    # Llamada al modelo IA (suponiendo que corre en http://localhost:8001/predict)
-    response = requests.post("http://127.0.0.1:8001/predict", json=data)
+    # === LLAMADA CORRECTA AL PREDICTOR ===
+    response = requests.post(
+        "https://proyecto-pia-2025.onrender.com/predict",
+        json=data
+    )
+    
     prediction = response.json().get("prediction")
 
     # Guardar en la DB
     saved = crud.create_analysis(db, data, prediction)
 
-    return {"id": saved.id, "prediction": prediction}
+    return {
+        "id": saved.id,
+        "prediction": prediction
+    }
