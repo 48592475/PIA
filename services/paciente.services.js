@@ -134,22 +134,27 @@ const guardarResultadoIA = async (resultado_ia) => {
   }
 }
 
-const guardarRadiografia = async (dni, radiografia) => {
-  const client = new Client(config)
-  await client.connect()
+const guardarRadiografia = async (dni, radiografia, resultadoIA) => {
+  const client = new Client(config);
+  await client.connect();
 
   try {
-    const { rows } = await client.query(`INSERT INTO radiografias (radiografia, dni) VALUES ($1, $2) RETURNING *`, [
-      radiografia,
-      dni,
-    ])
-    return rows[0]
+    const { rows } = await client.query(
+      `
+        INSERT INTO radiografias (radiografia, dni, resultado_ia)
+        VALUES ($1, $2, $3)
+        RETURNING *;
+      `,
+      [radiografia, dni, resultadoIA]
+    );
+
+    return rows[0];
   } catch (error) {
-    throw error
+    throw error;
   } finally {
-    await client.end()
+    await client.end();
   }
-}
+};
 
 const getPacientesByUserId = async (userId) => {
   const client = new Client(config)

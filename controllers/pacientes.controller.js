@@ -73,30 +73,45 @@ const save_resultado_ia = async (req, res) => {
 };
 export const uploadRadiografia = async (req, res) => {
   try {
-    const { dni } = req.body
-    const file = req.file
+    const { dni } = req.body;
+    const file = req.file;
 
     if (!file) {
-      return res.status(400).json({ message: "No se envió ninguna imagen" })
+      return res.status(400).json({ message: "No se envió ninguna imagen" });
     }
 
     if (!dni) {
-      return res.status(400).json({ message: "No se envió el DNI del paciente" })
+      return res.status(400).json({ message: "No se envió el DNI del paciente" });
     }
 
-    const radiografiaBuffer = file.buffer
+    // ===== 1. Mandar imagen a la IA =====
+    const formData = new FormData();
+    formData.append("file", new Blob([file.buffer]), file.originalname);
 
-    const nuevaRadiografia = await pacientesServices.guardarRadiografia(dni, radiografiaBuffer)
+    const response = await axios.post(process.env.URL_PREDICTOR_IMG, formData, {
+      headers: formData.getHeaders()
+    });
+
+    const iaResult = response.data.prediction; // "normal" o "pancreatic_tumor"
+
+    // ===== 2. Guardar en la DB =====
+    const nuevaRadiografia = await pacientesServices.guardarRadiografia(
+      dni,
+      file.buffer,
+      iaResult
+    );
 
     res.status(200).json({
       message: "Radiografía subida correctamente",
       radiografia: nuevaRadiografia,
-    })
+      ia: iaResult
+    });
+
   } catch (error) {
-    console.error("Error al subir radiografía:", error)
-    res.status(500).json({ message: "Error interno del servidor" })
+    console.error("Error al subir radiografía:", error);
+    res.status(500).json({ message: "Error interno del servidor", error });
   }
-}
+};
 
 const getPacientesByUser = async (req, res) => {
   try {
