@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from .. import crud, database
 import requests
 
-router = APIRouter(prefix="/analysis", tags=["analysis"])
+router = APIRouter(prefix="/image_analysis", tags=["image_analysis"])
 
 # Dependencia de sesión DB
 def get_db():
