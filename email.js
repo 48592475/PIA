@@ -1,41 +1,42 @@
 import nodemailer from "nodemailer";
 
-export const sendResetPasswordEmail = async (to, token) => {
-  const email = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "pancreasartificialintelligence@gmail.com", 
-      pass: "kyqd viqs xbfd mmmi", 
-    },
-  });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "pancreasartificialintelligence@gmail.com",
+    pass: "kyqd viqs xbfd mmmi", // sería mejor poner esto en variables de entorno
+  },
+  tls: {
+    // 👇 ESTO EVITA EL ERROR "self-signed certificate in certificate chain"
+    rejectUnauthorized: false,
+  },
+});
 
-  const resetLink = `https://pia-front.vercel.app/updatepassword/?token=${token}`
+// --------- Mail para resetear contraseña ----------
+export const sendResetPasswordEmail = async (to, token) => {
+  const resetLink = `https://pia-front.vercel.app/updatepassword/?token=${token}`;
 
   const mailOptions = {
-    from: "PIA<tuemail@gmail.com>",
+    from: "PIA <pancreasartificialintelligence@gmail.com>",
     to,
     subject: "Restablecer contraseña",
     html: `<p>Hacé clic en el siguiente enlace para restablecer tu contraseña:</p>
            <a href="${resetLink}">${resetLink}</a>`,
   };
 
-  await email.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 };
-export const Welcome = async (to) => {
-  const welcome = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "pancreasartificialintelligence@gmail.com", 
-      pass: "kyqd viqs xbfd mmmi", 
-    },
-  });
 
+// --------- Mail de bienvenida ----------
+export const Welcome = async (to) => {
   const welcomeEmail = {
-    from: "PIA <tuemail@gmail.com>",
+    from: "PIA <pancreasartificialintelligence@gmail.com>",
     to,
     subject: "Registro Exitoso en PIA",
-    html: `<p>Bienvenido, Muchisimas Gracias por confiar en nosotros, ahora a disfrutar de PIA. Cualquier duda podes contactarnos en: pancreasartificialintelligence@gmail.com</p>`,
+    html: `<p>Bienvenido, muchísimas gracias por confiar en nosotros. 
+           Ahora a disfrutar de PIA. Cualquier duda podés contactarnos en: 
+           pancreasartificialintelligence@gmail.com</p>`,
   };
 
-  await welcome.sendMail(welcomeEmail);
+  await transporter.sendMail(welcomeEmail);
 };
