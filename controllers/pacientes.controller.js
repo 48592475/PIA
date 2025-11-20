@@ -88,7 +88,7 @@ export const uploadRadiografia = async (req, res) => {
     const formData = new FormData();
     formData.append("file", new Blob([file.buffer]), file.originalname);
 
-    const response = await axios.post(process.env.URL_PREDICTOR_IMG, formData, {
+    const response = await axios.post("https://proyecto-pia-2025.onrender.com/predict-image", formData, {
       headers: formData.getHeaders()
     });
 
