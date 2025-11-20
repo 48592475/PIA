@@ -1,10 +1,9 @@
-# app/routes/image_analysis.py
-
 from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 import os
 
-from mia_predictor.prediccion import predict 
+# IMPORT CORRECTO, AHORA FUNCIONA
+from mia_predictor.prediccion import predict
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
