@@ -120,6 +120,6 @@ router.get("/get_pacients_by_id", verifyToken, pacientesController.getPacientesB
 router.post("/upload_sangre", pacientesController.upload_information)
 router.post("/save_resultado_ia", pacientesController.save_resultado_ia)
 router.post("/subir_imagen", verifyToken, upload.single("imagen"), pacientesController.uploadRadiografia)
-router.get("/radiografias", pacientesController.getAllRadiografias)
+router.get("/radiografias", verifyToken, pacientesController.getAllRadiografias)
 
 export default router
