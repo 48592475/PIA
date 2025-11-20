@@ -156,6 +156,7 @@ export const getAllRadiografias = async (req, res) => {
     const radiografiasBase64 = radiografias.map(r => ({
       dni: r.dni,
       imagen: `data:image/jpeg;base64,${r.radiografia.toString("base64")}`,
+      resultado_ia: r.resultado_ia
     }));
 
     return res.status(200).json(radiografiasBase64);

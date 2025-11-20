@@ -185,7 +185,7 @@ const getAllRadiografias = async () => {
 
   try {
     const { rows } = await client.query(
-      "SELECT dni, radiografia FROM radiografias ORDER BY id DESC"
+      "SELECT dni, radiografia, resultado_ia FROM radiografias ORDER BY id DESC"
     );
 
     return rows;
