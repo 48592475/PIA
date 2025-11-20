@@ -4,9 +4,9 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 import os
 
-from mia_predictor.prediccion import predict   
+from mia_predictor.prediccion import predict 
 
-router = APIRouter()
+router = APIRouter(prefix="/analysis", tags=["analysis"])
 
 @router.post("/image-analysis")
 async def image_analysis(file: UploadFile = File(...)):
